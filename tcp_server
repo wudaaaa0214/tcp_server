@@ -1,0 +1,29 @@
+import socket
+
+# Create server socket
+tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# Reuseaddress for server socket
+tcp_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+# Bind server port
+bind_port = ('', 8888)
+tcp_socket.bind(bind_port)
+
+# Create listen space
+tcp_socket.listen(128)
+
+while True:
+    # Create client socket
+    client_socket, client_address = tcp_socket.accept()
+
+    # Receive data from client
+    client_data = client_socket.recv(4096)
+    if client_data:
+        print(client_data.decode('GBK'))
+    else:
+        print('Opposite side has been broken link!')
+    # Send message to client
+    send_data = input()
+    client_socket.send(send_data.encode('gbk'))
+    client_socket.close()
